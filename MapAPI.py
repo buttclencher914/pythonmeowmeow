@@ -6,7 +6,6 @@ from math import sin, cos, radians, acos
 
 class Map:
     def __init__(self):
-        self.Ways = {}
         self.Nodes = {}
 
     def loadfromOSM(self, filename):
@@ -75,12 +74,6 @@ class Map:
             return None
         else:
             return self.Nodes[iden]
-
-    def getWayByID(self, iden):
-        if iden not in self.Ways:
-            return None
-        else:
-            return self.Ways[iden]
 
 
 class SNode:
