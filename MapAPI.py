@@ -156,13 +156,12 @@ class Map:
                         if w in self.Nodes:
                             tnode1 = self.Nodes[n.UID]
                             tnode2 = self.Nodes[w]
-                            tw.cost = self.__getDistance(tnode1.lat, tnode1.lon, tnode2.lat, tnode2.lon)
+                            tw.cost = self.getDistance(tnode1.lat, tnode1.lon, tnode2.lat, tnode2.lon)
                         tn = self.Nodes[n.UID]
                         if tw not in tn.ways and not tn.generated:
                             self.Nodes[n.UID].ways.append(tw)
 
-    @staticmethod
-    def __getDistance(x1, y1, x2, y2):  # calculate distance in meters between 2 coords
+    def getDistance(self, x1, y1, x2, y2):  # calculate distance in meters between 2 coords
         slat = radians(x1)
         slon = radians(y1)
         elat = radians(x2)
@@ -185,7 +184,7 @@ class Map:
             n = self.Nodes[k]
             if n.generated:
                 continue
-            if self.__getDistance(n.lat, n.lon, lat, lon) <= radius:
+            if self.getDistance(n.lat, n.lon, lat, lon) <= radius:
                 res.append(n)
         return res
 
@@ -196,7 +195,7 @@ class Map:
         comp = sys.maxsize
         ret = None
         for r in res:
-            cal = self.__getDistance(lat, lon, r.lat, r.lon)
+            cal = self.getDistance(lat, lon, r.lat, r.lon)
             if comp > cal:
                 comp = cal
                 ret = r
