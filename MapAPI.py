@@ -3,6 +3,27 @@ import sys
 
 from osmread import parse_file
 from math import sin, cos, radians, acos
+from typing import List
+
+
+class SNode:  # single node object
+    def __init__(self):
+        self.lat = None
+        self.lon = None
+        self.ID = None
+        self.generated = False  # if its not from the map but generated as an abstract node(doesnt exist)
+        self.tags = {}
+        self.ways = []
+
+
+class SWay:  # single way object that can belong to node.ways[] object
+    def __init__(self):
+        self.endNode = None
+        self.tags = {}
+        self.ID = None
+        self.cost = None
+        self.route = False  # if its specified in the relation
+        self.generated = False  # if its not from the map but generated as an abstract way(doesnt exist)
 
 
 class Map:
@@ -50,7 +71,7 @@ class Map:
                     relations[pd.id] = sroute  # relations are added here
         pf.close()
         nrelations = {}  # variable to store relations that contain ways and nodes
-        rrelations = {} # variable to store relations that contain relations
+        rrelations = {}  # variable to store relations that contain relations
         for key in relations:  # splitting is done here
             fin = []
             for member in relations[key].members:
@@ -107,7 +128,7 @@ class Map:
                         arr.append((anode.ID, 1))
                         if mem1.UID not in ways:
                             sr = _SRoute()
-                            sr.tags = route.tags # give it a tag
+                            sr.tags = route.tags  # give it a tag
                             ways[mem1.UID] = sr
                         a_node_count += 1
                     elif t3 == 3:  # if its node-way or way-node
@@ -135,7 +156,7 @@ class Map:
                     if com1[1] == 1:  # if n element is a node, then n+2 element is the next node
                         sw = SWay()
                         sw.ID = arr[i - 1][0]  # copy the id of the ways in between the nodes
-                        sw.tags = self.Nodes[com1[0]].tags # inherit the tags from node
+                        sw.tags = self.Nodes[com1[0]].tags  # inherit the tags from node
                         sw.generated = True
                         sw.route = True
                         sw.endNode = com2[0]
@@ -178,7 +199,7 @@ class Map:
         else:
             return 0
 
-    def getNodesByCoord(self, lat, lon, radius=0):  # gets array of nodes in the coords
+    def getNodesByCoord(self, lat, lon, radius=0) -> List[SNode]:  # gets array of nodes in the coords
         res = []
         for k in self.Nodes:
             n = self.Nodes[k]
@@ -188,7 +209,7 @@ class Map:
                 res.append(n)
         return res
 
-    def getNearestNodeByCoord(self, lat, lon, radius=0):  # will get a node closest to the coord, radius = search area
+    def getNearestNodeByCoord(self, lat, lon, radius=0) -> SNode:  # will get a node closest to the coord, radius = search area
         res = self.getNodesByCoord(lat, lon, radius)
         if len(res) == 0:
             return None
@@ -201,31 +222,11 @@ class Map:
                 ret = r
         return ret
 
-    def getNodeByID(self, iden):  # self-explanatory
+    def getNodeByID(self, iden) -> SNode:  # self-explanatory
         if iden not in self.Nodes:
             return None
         else:
             return self.Nodes[iden]
-
-
-class SNode:  # single node object
-    def __init__(self):
-        self.lat = None
-        self.lon = None
-        self.ID = None
-        self.generated = False # if its not from the map but generated as an abstract node(doesnt exist)
-        self.tags = {}
-        self.ways = []
-
-
-class SWay:  # single way object that can belong to node.ways[] object
-    def __init__(self):
-        self.endNode = None
-        self.tags = {}
-        self.ID = None
-        self.cost = None
-        self.route = False # if its specified in the relation
-        self.generated = False # if its not from the map but generated as an abstract way(doesnt exist)
 
 
 class _SRoute:  # private class
