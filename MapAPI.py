@@ -21,7 +21,7 @@ class SWay:  # single way object that can belong to node.ways[] object
         self.endNode = None
         self.tags = {}
         self.ID = None
-        self.cost = None
+        self.cost = 0
         self.route = False  # if its specified in the relation
         self.generated = False  # if its not from the map but generated as an abstract way(doesnt exist)
 
@@ -174,20 +174,23 @@ class Map:
                         tw.route = w.route
                         tw.generated = w.generated
                         tw.tags = ways[e].tags
-                        if w in self.Nodes:
+                        if w.UID in self.Nodes.keys():
                             tnode1 = self.Nodes[n.UID]
-                            tnode2 = self.Nodes[w]
+                            tnode2 = self.Nodes[w.UID]
                             tw.cost = self.getDistance(tnode1.lat, tnode1.lon, tnode2.lat, tnode2.lon)
                         tn = self.Nodes[n.UID]
                         if tw not in tn.ways and not tn.generated:
                             self.Nodes[n.UID].ways.append(tw)
 
     def getDistance(self, x1, y1, x2, y2):  # calculate distance in meters between 2 coords
-        slat = radians(x1)
-        slon = radians(y1)
-        elat = radians(x2)
-        elon = radians(y2)
-        return 6371000 * (acos(sin(slat) * sin(elat) + cos(slat) * cos(elat) * cos(slon - elon)))
+        if x1 == x2 and y1 == y2:
+            return 0
+        else:
+            slat = radians(x1)
+            slon = radians(y1)
+            elat = radians(x2)
+            elon = radians(y2)
+            return 6371000 * (acos(sin(slat) * sin(elat) + cos(slat) * cos(elat) * cos(slon - elon)))
 
     @staticmethod
     def __getTypeValue(typ):  # returns 1 if node, 2 if way, 3 if relation
