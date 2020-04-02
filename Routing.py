@@ -222,19 +222,28 @@ def perform(x1, y1, x2, y2):
     radius = m.getDistance(x1, y1, x2, y2) / 2 # draw a circle around the 2 points
     nodes = m.getNodesByCoord(midx, midy, radius+20) # get a list of Nodes in that circle with a bit of wiggle room
 
-    nodeIDList = {}
+    nodeIDList = {} # a dict that contains SNode objects(from MapAPI module)
+    tempnodeidlist = {} # a dict that contains Node Objects(from this module)
     for n in nodes:
+        nodeIDList[n.ID] = n
         t = Node(n.ID)
-        nodeIDList[n.ID] = t
+        tempnodeidlist[n.ID] = t
 
-    g = Graph(list(nodeIDList.values())) # put the nodes in the graph
+    g = Graph(list(tempnodeidlist.values())) # put the nodes in the graph
     for n in nodes:
         for w in n.ways:
-            match = False
-            for tc in nodeIDList.values():
-                if w.endNode == tc.data:
-                    match = True
-            if match:
-                g.connect(nodeIDList[n.ID], nodeIDList[w.endNode], w.cost) # now to connect the points together
+            if w.endNode in nodeIDList.keys():
+                g.connect(tempnodeidlist[n.ID], tempnodeidlist[w.endNode], w.cost) # now to connect the points together
 
-    print([(weight, [n.data for n in node]) for (weight, node) in g.dijkstra(nodeIDList[pointB.ID])])
+    res = []
+    # find a route that has id of pointA as the final destination
+    # if found, fill the ids in res
+    for (weight, node) in g.dijkstra(tempnodeidlist[pointB.ID]):
+        if node[-1].data == pointA.ID:
+            for n in node:
+                if not nodeIDList[n.ID].generated:
+                    res.append(n.data)
+            break
+    #print([(weight, [n.data for n in node]) for (weight, node) in g.dijkstra(tempnodeidlist[pointB.ID])])
+    return res
+
