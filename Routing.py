@@ -241,7 +241,7 @@ def perform(x1, y1, x2, y2):
     for (weight, node) in g.dijkstra(tempnodeidlist[pointB.ID]):
         if node[-1].data == pointA.ID:
             for n in node:
-                if not nodeIDList[n.ID].generated:
+                if not nodeIDList[n.data].generated:
                     res.append(n.data)
             break
     #print([(weight, [n.data for n in node]) for (weight, node) in g.dijkstra(tempnodeidlist[pointB.ID])])
