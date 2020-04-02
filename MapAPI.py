@@ -160,7 +160,6 @@ class Map:
                         sw.generated = True
                         sw.route = True
                         sw.endNode = com2[0]
-                        sw.cost = 0
                         self.Nodes[com1[0]].ways.append(sw)
         # now to link up the nodes and ways together that are actually connected but not specified by relation
         for e in ways:
