@@ -239,11 +239,32 @@ def perform(x1, y1, x2, y2):
     # find a route that has id of pointA as the final destination
     # if found, fill the ids in res
     for (weight, node) in g.dijkstra(tempnodeidlist[pointB.ID]):
-        if node[-1].data == pointA.ID:
-            for n in node:
-                if not nodeIDList[n.data].generated:
-                    res.append(n.data)
-            break
+        if len(node) != 0:
+            if node[-1].data == pointA.ID:
+                for n in node:
+                    res.append((n.data, nodeIDList[n.data].generated))
+                break
     #print([(weight, [n.data for n in node]) for (weight, node) in g.dijkstra(tempnodeidlist[pointB.ID])])
-    return res
+    ways = []
+    #get way ids in between the nodes if you want to use
+    for r in range(0, len(res)-1):
+        node = nodeIDList[res[r]]
+        for w in node.ways:
+            if w.endNode == res[r+1]:
+                ways.append((w.endNode, w.generated))
+                break
+
+    tres = []
+    tways = []
+    for t in res:
+        if not t[1]:
+            tres.append(t[0])
+    for t in ways:
+        if not t[1]:
+            tways.append(t[0])
+    print("list of nodes", res)
+    print("list of nodes without generated", tres)
+    print("list of ways", ways)
+    print("list of ways without generated", tways)
+    return tres
 
