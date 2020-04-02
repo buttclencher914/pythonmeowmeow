@@ -130,7 +130,7 @@ class Map:
                             sr = _SRoute()
                             sr.tags = route.tags  # give it a tag
                             ways[mem1.UID] = sr
-                        a_node_count += 1
+                        a_node_count -= 1
                     elif t3 == 3:  # if its node-way or way-node
                         continue  # no problem so nothing to fix
                     else:  # if its node-node
@@ -145,7 +145,7 @@ class Map:
                             anode.generated = True
                             anode.tags = route.tags
                             self.Nodes[mem1.UID] = anode
-                        a_way_count += 1
+                        a_way_count -= 1
             comarr.append(arr)  # storing the ids in an array completed[ relation[ tuple(ID, type), ...], ...]
 
         for arr in comarr:  # now to link the nodes together with the ways in between
