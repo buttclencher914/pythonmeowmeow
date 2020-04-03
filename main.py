@@ -13,11 +13,16 @@ import DisplayRoute as dr
 
 
 class mapCall:
-    def getRoute(self, x1, y1, x2, y2):
+    def getRoute(self, x1, y1, x2, y2, mapapiobject):
         #k = ox.core.graph_from_file(r"C:\Users\User\.spyder-py3\data\map2.osm")
-        dat = rt.perform(float(x1), float(y1), float(x2), float(y2))
+        dat = rt.perform(float(x1), float(y1), float(x2), float(y2), mapapiobject)
         dis = dr.DisplayRoute()
         dis.display(dat)
+
+m = Map()
+m.loadfromOSM("map2.osm")
+mc = mapCall()
+mc.getRoute(0,0,0,0, m)
         
    
 

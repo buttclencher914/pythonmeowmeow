@@ -210,11 +210,7 @@ class Graph:
         return min_dist_list
 
 
-def perform(x1, y1, x2, y2):
-    m = Map()
-    m.loadfromOSM("map2.osm")
-    print("loaded")
-
+def perform(x1, y1, x2, y2, m):
     pointA = m.getNearestNodeByCoord(x1, y1)
     pointA = m.getNextNonBuildingNode(pointA)
     pointB = m.getNearestNodeByCoord(x2, y2)
