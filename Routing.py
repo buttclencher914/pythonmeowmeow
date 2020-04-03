@@ -214,10 +214,11 @@ def perform(x1, y1, x2, y2):
     m = Map()
     m.loadfromOSM("map2.osm")
     print("loaded")
-    #m.dumpToPickle("map.pkl")
 
     pointA = m.getNearestNodeByCoord(x1, y1)
+    pointA = m.getNextNonBuildingNode(pointA)
     pointB = m.getNearestNodeByCoord(x2, y2)
+    pointB = m.getNextNonBuildingNode(pointB)
 
     midx = (x1 + x2) / 2 # get mid coordinates
     midy = (y1 + y2) / 2
@@ -247,27 +248,10 @@ def perform(x1, y1, x2, y2):
                     res.append((n.data, n.data <= 0))
                 break
 
-    ways = []
-    #get way ids in between the nodes if you want to use
-    for r in range(0, len(res)-1):
-        node = nodeIDList[res[r][0]]
-        for w in node.ways:
-            if w.endNode == res[r+1][0]:
-                ways.append((w.endNode, w.generated))
-                break
-
     tres = []
-    tways = []
     for t in res:
         if not t[1]:
             tres.append(t[0])
-    for t in ways:
-        if not t[1]:
-            tways.append(t[0])
 
-    print("list of nodes", res)
-    print("list of nodes without generated", tres)
-    print("list of ways", ways)
-    print("list of ways without generated", tways)
-    return tres, tways
+    return tres
 

@@ -2,11 +2,10 @@ import webbrowser
 
 
 class DisplayRoute:
-    def display(self, nodelist, waylist):
-        url = "https://overpass-turbo.eu/map.html?Q=%5Bout%3Ajson%5D%5Btimeout%3A25%5D%3B("
+    def display(self, nodelist):
+        url = "http://overpass-turbo.eu/map.html?Q=node(id%3A"
         for n in nodelist:
-            url += "node(" + str(n) + ")%3B"
-        for w in waylist:
-            url += "way(" + str(w) + ")%3B"
-        url += ")%3Bout%20geom%3B"
+            url += str(n) + "%2C"
+        url = url[:-3]
+        url += ")%3Bway%5Bhighway%5D(bn)%3Bout%20geom%3B"
         webbrowser.open(url, new=0, autoraise=True)

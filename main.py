@@ -24,6 +24,6 @@ class mapCall:
 # ff.getRoute(1.4014434, 103.9082113, 1.3997726, 103.9116292)
 dat = rt.perform(1.4014434, 103.9082113, 1.3997726, 103.9116292)
 dis = dr.DisplayRoute()
-dis.display(dat[0], dat[1])
+dis.display(dat)
 # from Routing import perform
 # perform(1.4017320, 103.9076350, 1.3990941, 103.9076522)
