@@ -213,8 +213,8 @@ class Graph:
 def perform(x1, y1, x2, y2):
     m = Map()
     m.loadfromOSM("map2.osm")
-    #print("loaded")
-    #m.dumpToJSON("map.json")
+    print("loaded")
+    #m.dumpToPickle("map.pkl")
 
     pointA = m.getNearestNodeByCoord(x1, y1)
     pointB = m.getNearestNodeByCoord(x2, y2)
@@ -269,5 +269,5 @@ def perform(x1, y1, x2, y2):
     print("list of nodes without generated", tres)
     print("list of ways", ways)
     print("list of ways without generated", tways)
-    return tres
+    return tres, tways
 
