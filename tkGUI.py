@@ -4,7 +4,6 @@ import osmnx as ox
 import networkx as nx
 from sklearn.neighbors import KDTree
 import matplotlib.pyplot as plt
-import overpy as oy
 from main import mapCall as mc
 # -*- coding: utf-8 -*-
 
@@ -56,7 +55,7 @@ class Ui_MainWindow(object):
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(2)
         self.tableWidget.setRowCount(10)
-        self.tableWidget.cellClicked()
+        self.tableWidget.cellClicked.connect(self.openGo)
         self.label_3 = QtWidgets.QLabel(self.tab_POI)
         self.label_3.setGeometry(QtCore.QRect(190, 10, 181, 20))
         self.label_3.setObjectName("label_3")
@@ -109,9 +108,17 @@ class Ui_MainWindow(object):
              counter+=1
              self.tableWidget.setItem(i,1, QtWidgets.QTableWidgetItem(str(queryTable[cols].head(10).values.item(counter))))
              counter+=1
+             
+    def openGo(self,row,col):
        
-         
-        
+        queryRes=self.SecondTabTextBox.text().split(",")
+        finaltext=self.tableWidget.item(row,1).text().replace("POINT (","")
+        finaltext=finaltext.replace(")","")
+        print(finaltext)
+        destQuery=finaltext.split(" ")
+        print(destQuery[0],queryRes[1],destQuery[0],destQuery[1])
+        D=mc()
+        D.getRoute(queryRes[0],queryRes[1],destQuery[1],destQuery[0])   
         
 if __name__ == "__main__":
     import sys
