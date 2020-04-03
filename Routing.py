@@ -213,6 +213,8 @@ class Graph:
 def perform(x1, y1, x2, y2):
     m = Map()
     m.loadfromOSM("map2.osm")
+    print("loaded")
+    m.dumpToJSON("map.json")
 
     pointA = m.getNearestNodeByCoord(x1, y1)
     pointB = m.getNearestNodeByCoord(x2, y2)
@@ -220,7 +222,7 @@ def perform(x1, y1, x2, y2):
     midx = (x1 + x2) / 2 # get mid coordinates
     midy = (y1 + y2) / 2
     radius = m.getDistance(x1, y1, x2, y2) / 2 # draw a circle around the 2 points
-    nodes = m.getNodesByCoord(midx, midy, radius+20) # get a list of Nodes in that circle with a bit of wiggle room
+    nodes = m.getNodesByCoord(midx, midy, radius+100) # get a list of Nodes in that circle with a bit of wiggle room
 
     nodeIDList = {} # a dict that contains SNode objects(from MapAPI module)
     tempnodeidlist = {} # a dict that contains Node Objects(from this module)
@@ -242,15 +244,15 @@ def perform(x1, y1, x2, y2):
         if len(node) != 0:
             if node[-1].data == pointA.ID:
                 for n in node:
-                    res.append((n.data, nodeIDList[n.data].generated))
+                    res.append((n.data, n.data <= 0))
                 break
-    #print([(weight, [n.data for n in node]) for (weight, node) in g.dijkstra(tempnodeidlist[pointB.ID])])
+
     ways = []
     #get way ids in between the nodes if you want to use
     for r in range(0, len(res)-1):
-        node = nodeIDList[res[r]]
+        node = nodeIDList[res[r][0]]
         for w in node.ways:
-            if w.endNode == res[r+1]:
+            if w.endNode == res[r+1][0]:
                 ways.append((w.endNode, w.generated))
                 break
 
@@ -262,6 +264,7 @@ def perform(x1, y1, x2, y2):
     for t in ways:
         if not t[1]:
             tways.append(t[0])
+
     print("list of nodes", res)
     print("list of nodes without generated", tres)
     print("list of ways", ways)
