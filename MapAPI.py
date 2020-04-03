@@ -4,6 +4,7 @@ import sys
 from osmread import parse_file
 from math import sin, cos, radians, acos
 from typing import List
+import pickle
 
 
 class SNode:  # single node object
@@ -181,15 +182,36 @@ class Map:
                         if tw not in tn.ways and not tn.generated:
                             self.Nodes[n.UID].ways.append(tw)
 
+    def getNextNonBuildingNode(self, node, radius=50) -> SNode:
+        if self.__isBuilding(node):
+            ns = self.getNodesByCoord(self.Nodes[node.ID].lat, self.Nodes[node.ID].lon, radius)
+            for n in ns:
+                if not self.__isBuilding(n):
+                    return n
+        else:
+            return node
+
+    def dumpToPickle(self, filename):
+        with open(filename, 'wb') as output:
+            pickle.dump(self.Nodes, output, pickle.HIGHEST_PROTOCOL)
+
+    def loadFromPickle(self, filename):
+        with open(filename, 'rb') as inp:
+            self.Nodes = pickle.load(inp)
+
+    def __isBuilding(self, node):
+        if node.ways:
+            if 'building' in node.ways[0].tags:
+                return True
+        return False
+
     def getDistance(self, x1, y1, x2, y2):  # calculate distance in meters between 2 coords
         if x1 == x2 and y1 == y2:
             return 0
         else:
             slat = radians(x1)
-            slon = radians(y1)
             elat = radians(x2)
-            elon = radians(y2)
-            return 6371000 * (acos(sin(slat) * sin(elat) + cos(slat) * cos(elat) * cos(slon - elon)))
+            return 6371000 * (acos(sin(slat) * sin(elat) + cos(slat) * cos(elat) * cos(radians(y1) - radians(y2))))
 
     @staticmethod
     def __getTypeValue(typ):  # returns 1 if node, 2 if way, 3 if relation
@@ -205,13 +227,13 @@ class Map:
         res = []
         for k in self.Nodes:
             n = self.Nodes[k]
-            if n.generated:
-                continue
-            if self.getDistance(n.lat, n.lon, lat, lon) <= radius:
-                res.append(n)
+            if not n.generated:
+                if self.getDistance(n.lat, n.lon, lat, lon) <= radius:
+                    res.append(n)
         return res
 
-    def getNearestNodeByCoord(self, lat, lon, radius=0) -> SNode:  # will get a node closest to the coord, radius = search area
+    def getNearestNodeByCoord(self, lat, lon,
+                              radius=0) -> SNode:  # will get a node closest to the coord, radius = search area
         res = self.getNodesByCoord(lat, lon, radius)
         if len(res) == 0:
             return None

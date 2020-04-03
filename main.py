@@ -5,8 +5,8 @@ import networkx as nx
 from sklearn.neighbors import KDTree
 import matplotlib.pyplot as plt
 import overpy as opy
-import Djistra as rt
-import over as dr
+import Routing as rt
+import DisplayRoute as dr
 
 
 # Map.getNearestNodeByCoord(self,)
@@ -17,7 +17,7 @@ class mapCall:
         #k = ox.core.graph_from_file(r"C:\Users\User\.spyder-py3\data\map2.osm")
         dat = rt.perform(float(x1), float(y1), float(x2), float(y2))
         dis = dr.DisplayRoute()
-        dis.display(dat[0], dat[1])
+        dis.display(dat)
         
    
 
