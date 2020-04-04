@@ -1,20 +1,9 @@
-import PySimpleGUI as sg
-import numpy as np
+# Written by Eugene Chan, ID:1902208
+
 import osmnx as ox
-import networkx as nx
-from sklearn.neighbors import KDTree
-import matplotlib.pyplot as plt
 from main import mapCall as mc
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'uiVer1.ui'
-#
-# Created by: PyQt5 UI code generator 5.9.2
-#
-# WARNING! All changes made in this file will be lost!
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-class Ui_MainWindow(object):
+class Ui_MainWindow(object): #GUI
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(659, 646)
@@ -40,9 +29,6 @@ class Ui_MainWindow(object):
         self.label_2 = QtWidgets.QLabel(self.tab)
         self.label_2.setGeometry(QtCore.QRect(240, 110, 61, 16))
         self.label_2.setObjectName("label_2")
-        self.checkBox = QtWidgets.QCheckBox(self.tab)
-        self.checkBox.setGeometry(QtCore.QRect(100, 170, 121, 31))
-        self.checkBox.setObjectName("checkBox")
         self.pushButton = QtWidgets.QPushButton(self.tab)
         self.pushButton.setGeometry(QtCore.QRect(120, 210, 75, 23))
         self.pushButton.setObjectName("pushButton")
@@ -80,7 +66,7 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "Point A"))
         self.lbl_EnterCoordinates.setText(_translate("MainWindow", "Enter the coordinates "))
         self.label_2.setText(_translate("MainWindow", "Point B"))
-        self.checkBox.setText(_translate("MainWindow", "Use sheltered Path"))
+       
         self.pushButton.setText(_translate("MainWindow", "OK"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Get By Coordinates"))
         self.label_3.setText(_translate("MainWindow", "Enter your coordinates here"))
@@ -88,17 +74,16 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_POI), _translate("MainWindow", "Go to Point of Interest"))
       
 
-    def on_click(self):
-        _translate = QtCore.QCoreApplication.translate
+    def on_click(self):#When coordinates are selected load window
         sA = self.PointABox.text().split(",")
         dA=self.PointBBox.text().split(",")
-        #checkBoxValue=self.checkBox.isChecked();
+      
         D=mc()
         D.getRoute(sA[0],sA[1],dA[0],dA[1])     
         
         
-    def getTable(self):
-         _translate = QtCore.QCoreApplication.translate
+    def getTable(self): #Populate table with  the top 10 nearest amenties
+     
          queryRes=self.SecondTabTextBox.text().split(",")
          queryTable = ox.pois_from_point((float(queryRes[0]),float(queryRes[1])),distance=3000,amenities=['restaurant'])
          cols=['name','geometry']
@@ -109,14 +94,12 @@ class Ui_MainWindow(object):
              self.tableWidget.setItem(i,1, QtWidgets.QTableWidgetItem(str(queryTable[cols].head(10).values.item(counter))))
              counter+=1
              
-    def openGo(self,row,col):
+    def openGo(self,row,col):#When the row is clicked perform routing
        
         queryRes=self.SecondTabTextBox.text().split(",")
         finaltext=self.tableWidget.item(row,1).text().replace("POINT (","")
         finaltext=finaltext.replace(")","")
-        print(finaltext)
         destQuery=finaltext.split(" ")
-        print(destQuery[0],queryRes[1],destQuery[0],destQuery[1])
         D=mc()
         D.getRoute(queryRes[0],queryRes[1],destQuery[1],destQuery[0])   
         
