@@ -1,9 +1,12 @@
 # Written by Eugene Chan, ID:1902208
-
+from MapAPI import Map as m
 import osmnx as ox
-from main import mapCall as mc
+from DisplayRoute import mapCall as mc
 from PyQt5 import QtCore, QtGui, QtWidgets
+pk=m()
+pk.loadfromOSM(r"map2.osm")  
 class Ui_MainWindow(object): #GUI
+    
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(659, 646)
@@ -77,9 +80,10 @@ class Ui_MainWindow(object): #GUI
     def on_click(self):#When coordinates are selected load window
         sA = self.PointABox.text().split(",")
         dA=self.PointBBox.text().split(",")
-      
+        
         D=mc()
-        D.getRoute(sA[0],sA[1],dA[0],dA[1])     
+        
+        D.getRoute(sA[0],sA[1],dA[0],dA[1],pk)     
         
         
     def getTable(self): #Populate table with  the top 10 nearest amenties
@@ -101,7 +105,8 @@ class Ui_MainWindow(object): #GUI
         finaltext=finaltext.replace(")","")
         destQuery=finaltext.split(" ")
         D=mc()
-        D.getRoute(queryRes[0],queryRes[1],destQuery[1],destQuery[0])   
+        
+        D.getRoute(queryRes[0],queryRes[1],destQuery[1],destQuery[0],m)   
         
 if __name__ == "__main__":
     import sys
