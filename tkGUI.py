@@ -106,7 +106,7 @@ class Ui_MainWindow(object): #GUI
         destQuery=finaltext.split(" ")
         D=mc()
         
-        D.getRoute(queryRes[0],queryRes[1],destQuery[1],destQuery[0],m)   
+        D.getRoute(queryRes[0],queryRes[1],destQuery[1],destQuery[0],pk)   
         
 if __name__ == "__main__":
     import sys
