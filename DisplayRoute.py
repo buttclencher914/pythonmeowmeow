@@ -10,7 +10,10 @@ class DisplayRoute:
             url += str(n) + "%2C"
         url = url[:-3]
         url += ")%3Bway%5Bhighway%5D(bn)%3Bout%20geom%3B"
-        webbrowser.open(url, new=0, autoraise=True)
+        if not nodelist:
+            print("No routes found")
+        else:
+            webbrowser.open(url, new=0, autoraise=True)
 class mapCall:
     def getRoute(self, x1, y1, x2, y2,m):
       

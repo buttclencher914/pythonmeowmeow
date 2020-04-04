@@ -4,7 +4,9 @@ import osmnx as ox
 from DisplayRoute import mapCall as mc
 from PyQt5 import QtCore, QtGui, QtWidgets
 pk=m()
-pk.loadfromOSM(r"map2.osm")  
+print("Loading OSM data")
+pk.loadfromOSM("map2.osm")
+print("Loaded OSM data")
 class Ui_MainWindow(object): #GUI
     
     def setupUi(self, MainWindow):
