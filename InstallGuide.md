@@ -1,4 +1,7 @@
 Installation guide
+Program used to run Spyder:
+https://www.spyder-ide.org/
+
 
 OSMNX:
 conda install -c conda-forge osmnx
@@ -10,3 +13,5 @@ PyQt5(GUI):
 pip install PyQt5
 
 map2.osm needs to be in the same folder as the .py files to work
+
+To run use main.py.Take note that the ui may not appear on first run.Run the main again if this happens
