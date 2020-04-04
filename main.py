@@ -1,15 +1,19 @@
 
-import Routing as rt
-import DisplayRoute as dr
+from PyQt5 import  QtGui,QtWidgets
+from tkGUI import Ui_MainWindow
+import sys
 
 
+class mainWin(QtWidgets.QMainWindow):
+    def __init__(self, parent=None):
+        QtWidgets.QWidget.__init__(self, parent)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
 
 
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    myapp = mainWin()
+    myapp.show()
+    sys.exit(app.exec_())
 
-class mapCall:
-    def getRoute(self, x1, y1, x2, y2):
-        dat = rt.perform(float(x1), float(y1), float(x2), float(y2))
-        dis = dr.DisplayRoute()
-        dis.display(dat)
-        
-   
